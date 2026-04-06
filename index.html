@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo - João Dagostim</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --header-color: #1e40af;
+            --bg: #f8fafc;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .bingo-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 4px solid var(--primary);
+        }
+
+        .bingo-header {
+            display: grid;
+            grid-template-columns: repeat(5, 70px);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .letter {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            color: var(--header-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 70px);
+            gap: 10px;
+        }
+
+        /* Estilo dos inputs de número */
+        .cell-input {
+            width: 70px;
+            height: 70px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #334155;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .cell-input:focus {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Remover setas do input number */
+        .cell-input::-webkit-inner-spin-button,
+        .cell-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .free-space {
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn-clear {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-print {
+            background: #10b981;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        @media print {
+            .controls {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .bingo-container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2 style="color: #1e293b;">Bingo João Dagostim </h2>
+    <p style="color: #64748b; margin-bottom: 20px;">Boa sorte!</p>
+
+    <div class="bingo-container">
+        <div class="bingo-header">
+            <div class="letter">B</div>
+            <div class="letter">I</div>
+            <div class="letter">N</div>
+            <div class="letter">G</div>
+            <div class="letter">O</div>
+        </div>
+        <div class="grid" id="bingoGrid">
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-clear" onclick="clearAll()">Limpar Tudo</button>
+    </div>
+
+    <script>
+        const grid = document.getElementById('bingoGrid');
+
+        function createGrid() {
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    // Centro da cartela (Espaço Livre)
+                    if (row === 2 && col === 2) {
+                        const free = document.createElement('div');
+                        free.className = 'free-space';
+                        free.innerText = 'Livre';
+                        grid.appendChild(free);
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.className = 'cell-input';
+                        input.min = 1;
+                        input.max = 75;
+                        input.placeholder = "-";
+
+                        // Validação simples ao digitar
+                        input.addEventListener('input', function () {
+                            if (this.value > 75) this.value = 75;
+                            if (this.value < 0) this.value = '';
+                        });
+
+                        grid.appendChild(input);
+                    }
+                }
+            }
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('.cell-input');
+            inputs.forEach(input => input.value = '');
+        }
+
+        createGrid();
+    </script>
+</body>
+
+</html>
