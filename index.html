@@ -4,36 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo - João Dagostim</title>
+    <title>Gabarito de Bingo Profissional - 75 Números</title>
     <style>
         :root {
             --primary: #2563eb;
             --header-color: #1e40af;
             --bg: #f8fafc;
+            --cell-bg: #ffffff;
+            --cell-border: #cbd5e1;
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            margin: 0;
         }
 
-        .bingo-container {
+        h1 {
+            color: #334155;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Container do Painel */
+        .bingo-card {
             background: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             border: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
+        /* Cabeçalho B I N G O */
         .bingo-header {
             display: grid;
-            grid-template-columns: repeat(5, 70px);
+            grid-template-columns: repeat(5, 80px);
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
 
         .letter {
@@ -43,65 +58,58 @@
             color: var(--header-color);
         }
 
-        .grid {
+        /* Grade de 15 linhas por 5 colunas */
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(5, 70px);
-            gap: 10px;
+            grid-template-columns: repeat(5, 80px);
+            /* 5 colunas (B I N G O) */
+            grid-template-rows: repeat(15, 45px);
+            /* 15 linhas de números */
+            gap: 8px;
         }
 
-        /* Estilo dos inputs de número */
         .cell-input {
-            width: 70px;
-            height: 70px;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
+            width: 80px;
+            height: 45px;
+            border: 2px solid var(--cell-border);
+            border-radius: 6px;
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #334155;
             outline: none;
             transition: all 0.2s;
+            background-color: var(--cell-bg);
         }
 
+        /* Efeito ao focar no campo */
         .cell-input:focus {
             border-color: var(--primary);
             background-color: #eff6ff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        /* Remover setas do input number */
-        .cell-input::-webkit-inner-spin-button,
-        .cell-input::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .free-space {
-            background-color: #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: #64748b;
-            font-weight: bold;
-            text-transform: uppercase;
-            border: 2px dashed #cbd5e1;
-            border-radius: 8px;
+        /* Efeito quando o número é preenchido */
+        .cell-input:not(:placeholder-shown) {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--header-color);
         }
 
         .controls {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
 
         button {
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 12px 25px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
-            font-weight: 600;
-            transition: opacity 0.2s;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: transform 0.1s, opacity 0.2s;
         }
 
         .btn-clear {
@@ -109,7 +117,7 @@
             color: white;
         }
 
-        .btn-print {
+        .btn-full {
             background: #10b981;
             color: white;
         }
@@ -118,17 +126,20 @@
             opacity: 0.9;
         }
 
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Esconde setas do input number */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         @media print {
             .controls {
                 display: none;
-            }
-
-            body {
-                background: white;
-            }
-
-            .bingo-container {
-                box-shadow: none;
             }
         }
     </style>
@@ -136,10 +147,9 @@
 
 <body>
 
-    <h2 style="color: #1e293b;">Bingo João Dagostim </h2>
-    <p style="color: #64748b; margin-bottom: 20px;">Boa sorte!</p>
+    <h1>Gabarito bingo João Dagostim</h1>
 
-    <div class="bingo-container">
+    <div class="bingo-card">
         <div class="bingo-header">
             <div class="letter">B</div>
             <div class="letter">I</div>
@@ -147,52 +157,70 @@
             <div class="letter">G</div>
             <div class="letter">O</div>
         </div>
-        <div class="grid" id="bingoGrid">
+        <div class="grid-container" id="gabaritoGrid">
         </div>
     </div>
 
     <div class="controls">
-        <button class="btn-clear" onclick="clearAll()">Limpar Tudo</button>
+        <button class="btn-clear" onclick="limparTudo()">Limpar Painel</button>
+        <button class="btn-full" onclick="toggleFullScreen()">Tela Cheia</button>
     </div>
 
     <script>
-        const grid = document.getElementById('bingoGrid');
+        const grid = document.getElementById('gabaritoGrid');
 
-        function createGrid() {
-            for (let row = 0; row < 5; row++) {
+        // Definição dos intervalos por coluna
+        const ranges = [
+            { l: 'B', min: 1, max: 15 },
+            { l: 'I', min: 16, max: 30 },
+            { l: 'N', min: 31, max: 45 },
+            { l: 'G', min: 46, max: 60 },
+            { l: 'O', min: 61, max: 75 }
+        ];
+
+        function montarGabarito() {
+            // Criamos 15 linhas
+            for (let row = 0; row < 15; row++) {
+                // Em cada linha, passamos pelas 5 colunas (B, I, N, G, O)
                 for (let col = 0; col < 5; col++) {
-                    // Centro da cartela (Espaço Livre)
-                    if (row === 2 && col === 2) {
-                        const free = document.createElement('div');
-                        free.className = 'free-space';
-                        free.innerText = 'Livre';
-                        grid.appendChild(free);
-                    } else {
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.className = 'cell-input';
-                        input.min = 1;
-                        input.max = 75;
-                        input.placeholder = "-";
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'cell-input';
+                    input.placeholder = "-";
 
-                        // Validação simples ao digitar
-                        input.addEventListener('input', function () {
-                            if (this.value > 75) this.value = 75;
-                            if (this.value < 0) this.value = '';
-                        });
+                    const config = ranges[col];
 
-                        grid.appendChild(input);
-                    }
+                    // Validação de intervalo ao sair do campo (blur) ou mudar
+                    input.addEventListener('change', function () {
+                        const val = parseInt(this.value);
+                        if (val < config.min || val > config.max) {
+                            alert(`Erro: Na coluna ${config.l}, digite números entre ${config.min} e ${config.max}.`);
+                            this.value = '';
+                        }
+                    });
+
+                    grid.appendChild(input);
                 }
             }
         }
 
-        function clearAll() {
-            const inputs = document.querySelectorAll('.cell-input');
-            inputs.forEach(input => input.value = '');
+        function limparTudo() {
+            if (confirm("Deseja apagar todas as pedras do gabarito?")) {
+                document.querySelectorAll('.cell-input').forEach(el => el.value = '');
+            }
         }
 
-        createGrid();
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        montarGabarito();
     </script>
 </body>
 
